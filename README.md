@@ -1,4 +1,3 @@
-````md
 # 🏥 MediGuide – 의료분쟁 솔루션 AI 챗봇 (Frontend)
 
 ## 🧱 기술 스택 (Tech Stack)
@@ -117,7 +116,3 @@ npm run dev
 * 현재 프론트엔드는 **Gemini API를 직접 호출하는 구조**
 * 실서비스 단계에서는 **백엔드 서버를 통한 AI 호출 구조로 분리 예정**
 * Tailwind CSS 기반 UI이므로 스타일 관련 수정 시 Tailwind 클래스 기준으로 작업
-
----
-
-```
