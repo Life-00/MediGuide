@@ -1,6 +1,6 @@
 # 🏥 MediGuide – 의료분쟁 솔루션 AI 챗봇 (Frontend)
 
-<img width="1920" height="914" alt="image" src="https://github.com/user-attachments/assets/ad9782d5-553e-49e3-9fa8-f399b566eab9" />
+<img width="1920" height="921" alt="image" src="https://github.com/user-attachments/assets/b23b8eff-a32c-4883-bc0b-5d75a6cab285" />
 
 ## 🧱 기술 스택 (Tech Stack)
 
