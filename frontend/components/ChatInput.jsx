@@ -98,7 +98,7 @@ export const ChatInput = ({ onSendMessage, disabled = false }) => {
           </div>
           <span className="text-[10px] text-slate-300">|</span>
           <p className="text-[10px] font-medium text-slate-400">
-            Gemini 3 Pro 모델이 최적의 답변을 생성합니다.
+            watsonx 모델이 최적의 답변을 생성합니다.
           </p>
         </div>
       </div>

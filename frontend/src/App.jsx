@@ -153,7 +153,7 @@ export default function App() {
               {sessions.find((s) => s.id === activeSessionId)?.title || "새로운 대화"}
             </span>
             <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-              ● GEMINI 3 PRO ACTIVE
+              ● watsonx ACTIVE
             </span>
           </div>
 
