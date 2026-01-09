@@ -1,2 +1,48 @@
-# MediGuide
-RAG-based Medical Dispute Support AI powered by IBM watsonx: Analyzing medical malpractice precedents and simplifying legal jargon for public accessibility.
+# 🩺 MediGuide (메디가이드)
+> **IBM watsonx.ai 기반 RAG 솔루션: 의료분쟁 판례 분석 및 법률 용어 순화 서비스**
+
+[![IBM watsonx](https://img.shields.io/badge/Powered%20by-IBM%20watsonx-0f62fe?style=for-the-badge&logo=ibm)](https://www.ibm.com/watsonx)
+[![Platform](https://img.shields.io/badge/Service-MediGuide-blue?style=for-the-badge)](#)
+
+## 📝 프로젝트 개요 (Project Overview)
+의료 사고가 의심될 때 일반인이 가장 먼저 마주하는 벽은 어려운 의학/법률 용어와 방대한 판례 데이터입니다.  
+**MediGuide**는 이 벽을 허물기 위해 다음과 같은 솔루션을 제공합니다:
+1. **유사 사례 매칭:** 한국의료분쟁조정중재원 데이터를 기반으로 사용자 상황과 가장 유사한 판례를 초고속 검색합니다.
+2. **쉬운 용어 번역:** "주의의무 위반", "설명의무 위반" 등 딱딱한 용어를 초등학생도 이해할 수 있게 풀이합니다.
+3. **행동 가이드:** 당황한 사용자에게 증거 수집 방법과 법적 절차를 단계별로 안내합니다.
+
+---
+
+## ✨ 핵심 기능 (Key Features)
+- **스마트 문진 (Interactive Interview):** AI가 사용자의 상황을 구체적으로 되물어 사고의 핵심 정보를 파악합니다.
+- **RAG 기반 유사 사례 검색:** 단순 키워드 검색이 아닌, 시술명/부작용/인과관계를 분석하는 의미(Semantic) 기반 검색을 수행합니다.
+- **맞춤형 요약 리포트:** [사건 요약 - 핵심 쟁점 - 결과 - 시사점]의 구조화된 답변을 제공합니다.
+- **증거 체크리스트:** 진료기록부, 수술 동의서 등 대응에 꼭 필요한 서류 리스트를 자동 생성합니다.
+
+---
+
+## 🛠 기술 스택 (Tech Stack)
+| 구분 | 사용 기술 |
+| :--- | :--- |
+| **LLM & AI** | **IBM watsonx.ai** (Granite-3.0 / Llama-3-70b) |
+| **Vector DB** | **Milvus** / ChromaDB (watsonx.data 연동) |
+| **Backend** | Python, FastAPI |
+| **Frontend** | React, Next.js, Tailwind CSS |
+| **Data** | PDF/Excel Parsing, Embedding (watsonx Embedding SDK) |
+
+---
+
+## 🏗 시스템 아키텍처 (System Architecture)
+
+
+
+```mermaid
+graph TD
+    User([사용자]) --> UI[프론트엔드: React]
+    UI --> API[백엔드: FastAPI]
+    API --> Embed[IBM Embedding 모델]
+    Embed --> VDB[(Vector DB: 판례 데이터)]
+    VDB --> Context[유사 판례 데이터 추출]
+    Context --> LLM[IBM watsonx.ai: Granite/Llama-3]
+    LLM --> Response[쉽게 풀이된 AI 답변]
+    Response --> UI
