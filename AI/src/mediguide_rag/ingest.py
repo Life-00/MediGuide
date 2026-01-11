@@ -18,23 +18,42 @@ PERSIST_DIR = "./chroma_db_fixed"  # DB 저장 경로
 def ingest_data():
     print("📂 데이터 로딩 및 DB 구축 시작...")
     
-    # 1. 데이터 로드
-    df = pd.read_excel("test-data.xlsx")
+    # 1. 데이터 로드 [수정됨: 파일명 변경]
+    # 엑셀 파일명을 정확히 맞춰주세요.
+    file_path = "test-data2.xlsx" 
+    
+    try:
+        df = pd.read_excel(file_path)
+    except FileNotFoundError:
+        print(f"❌ 파일을 찾을 수 없습니다: {file_path}")
+        return
+
     chunks = []
+    print(f"🔹 총 {len(df)}개의 데이터를 처리합니다.")
+
     for idx, row in df.iterrows():
+        # [핵심 수정: 새 데이터셋 컬럼명에 맞게 매핑]
+        # 새 파일의 헤더: case_id, medical_dept, title, case_overview, issues, solution, result
         content = f"""
-        [사건번호]: {row.get('Case', 'N/A')}
-        [진료과목]: {row.get('진료과목 (medical_dept)', 'N/A')}
-        [수술명]: {row.get('시술/수술명 (procedure_name)', 'N/A')}
-        [부작용]: {row.get('부작용/증상 (symptom)', 'N/A')}
-        [쟁점]: {row.get('주요 쟁점 (legal_issues)', 'N/A')}
-        [결과]: {row.get('조정 결과 (result)', 'N/A')}
-        [판례원문]: {row.get('판례 원문 (original_text)', 'N/A')}
+        [사건번호]: {row.get('case_id', 'N/A')}
+        [진료과목]: {row.get('medical_dept', 'N/A')}
+        [사건명]: {row.get('title', 'N/A')}
+        [사건개요]: {row.get('case_overview', 'N/A')}
+        [주요쟁점]: {row.get('issues', 'N/A')}
+        [해결/판결요지]: {row.get('solution', 'N/A')}
+        [처리결과]: {row.get('result', 'N/A')}
         """
-        metadata = {"id": str(idx), "case_id": str(row.get('Case', 'unknown'))}
+        
+        # 메타데이터도 새 컬럼명에 맞게 수정
+        metadata = {
+            "id": str(idx), 
+            "case_id": str(row.get('case_id', 'unknown')),
+            "dept": str(row.get('medical_dept', 'unknown')) # 필터링용으로 과목 추가 추천
+        }
+        
         chunks.append(Document(page_content=content.strip(), metadata=metadata))
 
-    # 2. 임베딩 설정 (DB 만들 때와 읽을 때 똑같아야 함!)
+    # 2. 임베딩 설정
     embed_params = {
         EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512,
         EmbedTextParamsMetaNames.RETURN_OPTIONS: {"input_text": True},
@@ -50,8 +69,10 @@ def ingest_data():
 
     # 3. 벡터 DB 생성 및 저장
     if os.path.exists(PERSIST_DIR):
-        print("⚠️ 기존 DB가 존재합니다. 삭제하거나 덮어씁니다.")
-        # shutil.rmtree(PERSIST_DIR) # 필요하면 기존 폴더 삭제 코드 추가
+        print("⚠️ 기존 DB 폴더가 존재합니다. 덮어쓰기를 진행합니다.")
+        # 안전하게 새로 만들고 싶다면 아래 주석 해제 (기존 DB 삭제)
+        # import shutil
+        # shutil.rmtree(PERSIST_DIR)
     
     Chroma.from_documents(
         documents=chunks,
