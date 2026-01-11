@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Plus,
   MessageSquare,
@@ -6,6 +6,7 @@ import {
   PanelLeftClose,
   Trash2,
   Search,
+  Pencil,
 } from "lucide-react";
 
 export const Sidebar = ({
@@ -14,9 +15,36 @@ export const Sidebar = ({
   onNewChat,
   onSelectSession,
   onDeleteSession,
+  onRenameSession, // ✅ 추가
   isOpen,
   onToggle,
 }) => {
+  const [editingId, setEditingId] = useState(null);
+  const [draftTitle, setDraftTitle] = useState("");
+
+  // 활성 세션이 바뀌면 편집 상태 해제(원치 않으면 제거 가능)
+  useEffect(() => {
+    setEditingId(null);
+    setDraftTitle("");
+  }, [activeSessionId]);
+
+  const startEdit = (session) => {
+    setEditingId(session.id);
+    setDraftTitle(session.title || "");
+  };
+
+  const commitEdit = (sessionId) => {
+    const t = (draftTitle || "").trim();
+    if (t) onRenameSession?.(sessionId, t);
+    setEditingId(null);
+    setDraftTitle("");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setDraftTitle("");
+  };
+
   return (
     <div
       className={`
@@ -92,47 +120,88 @@ export const Sidebar = ({
               </div>
             </div>
           ) : (
-            sessions.map((session) => (
-              <button
-                key={session.id}
-                onClick={() => onSelectSession(session.id)}
-                className={`group flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-sm transition-all relative ${
-                  activeSessionId === session.id
-                    ? "bg-slate-800 text-white shadow-inner border-l-4 border-indigo-500"
-                    : "hover:bg-slate-800/50 text-slate-400 hover:text-slate-200"
-                }`}
-                type="button"
-              >
-                <MessageSquare
-                  size={16}
-                  className={
-                    activeSessionId === session.id
-                      ? "text-indigo-400"
-                      : "text-slate-600"
-                  }
-                />
-                <span className="flex-1 truncate text-left font-medium">
-                  {session.title}
-                </span>
+            sessions.map((session) => {
+              const isActive = activeSessionId === session.id;
+              const isEditing = editingId === session.id;
 
-                {/* 삭제 아이콘: 버튼 내부 클릭 시 세션 선택 클릭도 같이 타지 않게 stopPropagation */}
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDeleteSession(session.id, e);
-                  }}
-                  className={`p-1.5 rounded-md hover:bg-red-500/20 hover:text-red-400 transition-all ${
-                    activeSessionId === session.id
-                      ? "opacity-100"
-                      : "opacity-0 group-hover:opacity-100"
+              return (
+                <button
+                  key={session.id}
+                  onClick={() => onSelectSession(session.id)}
+                  className={`group flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-sm transition-all relative ${
+                    isActive
+                      ? "bg-slate-800 text-white shadow-inner border-l-4 border-indigo-500"
+                      : "hover:bg-slate-800/50 text-slate-400 hover:text-slate-200"
                   }`}
-                  role="button"
-                  tabIndex={0}
+                  type="button"
                 >
-                  <Trash2 size={14} />
-                </div>
-              </button>
-            ))
+                  <MessageSquare
+                    size={16}
+                    className={isActive ? "text-indigo-400" : "text-slate-600"}
+                  />
+
+                  {/* 제목 영역: 보기/편집 전환 */}
+                  <div className="flex-1 min-w-0">
+                    {isEditing ? (
+                      <input
+                        value={draftTitle}
+                        onChange={(e) => setDraftTitle(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            commitEdit(session.id);
+                          } else if (e.key === "Escape") {
+                            e.preventDefault();
+                            cancelEdit();
+                          }
+                        }}
+                        onBlur={() => commitEdit(session.id)}
+                        autoFocus
+                        className="w-full bg-slate-900/40 border border-slate-600 rounded-lg px-2 py-1 text-sm text-slate-100 outline-none"
+                      />
+                    ) : (
+                      <span className="block truncate text-left font-medium">
+                        {session.title}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 편집 아이콘 */}
+                  {!isEditing && (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startEdit(session);
+                      }}
+                      className={`p-1.5 rounded-md hover:bg-slate-700/60 hover:text-slate-100 transition-all ${
+                        isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                      }`}
+                      role="button"
+                      tabIndex={0}
+                      title="이름 변경"
+                    >
+                      <Pencil size={14} />
+                    </div>
+                  )}
+
+                  {/* 삭제 아이콘 */}
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteSession(session.id, e);
+                    }}
+                    className={`p-1.5 rounded-md hover:bg-red-500/20 hover:text-red-400 transition-all ${
+                      isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                    }`}
+                    role="button"
+                    tabIndex={0}
+                    title="삭제"
+                  >
+                    <Trash2 size={14} />
+                  </div>
+                </button>
+              );
+            })
           )}
         </div>
 
