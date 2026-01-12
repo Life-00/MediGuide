@@ -18,8 +18,7 @@ PERSIST_DIR = "./chroma_db_fixed"  # DB 저장 경로
 def ingest_data():
     print("📂 데이터 로딩 및 DB 구축 시작...")
     
-    # 1. 데이터 로드 [수정됨: 파일명 변경]
-    # 엑셀 파일명을 정확히 맞춰주세요.
+    # 1. 데이터 로드
     file_path = "test-data2.xlsx" 
     
     try:

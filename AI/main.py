@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import json
 import asyncio
 
-# [수정] get_retriever 함수 추가로 가져오기
+# get_retriever 함수 추가로 가져오기
 try:
     from rag_pipeline import get_rag_chain, get_retriever, get_session_history
 except ImportError:
@@ -25,7 +25,7 @@ app.add_middleware(
 
 # 1. 체인 및 검색기 로딩
 chain = get_rag_chain()
-retriever = get_retriever() # [추가] 이제 검색만 따로 할 수 있음
+retriever = get_retriever() 
 
 class Question(BaseModel):
     query: str
@@ -40,7 +40,7 @@ async def chat_endpoint(request: Question):
     )
     return {"answer": answer}
 
-# [기능 2] 답변 스트리밍 (타자 치는 효과) - ⭐️ 추천
+# [기능 2] 답변 스트리밍 (타자 치는 효과) 
 @app.post("/chat/stream")
 async def chat_stream_endpoint(request: Question):
     async def generate():
@@ -55,7 +55,7 @@ async def chat_stream_endpoint(request: Question):
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 
-# [기능 3] 답변 + 근거 자료(출처) 같이 주기 - ⭐️ 기획서 구현용
+# [기능 3] 답변 + 근거 자료(출처) 같이 주기 
 @app.post("/chat_with_sources")
 async def chat_with_sources(request: Question):
     # 1. 먼저 검색을 수행해서 관련 판례(Docs)를 가져옴
@@ -68,7 +68,7 @@ async def chat_with_sources(request: Question):
             "title": doc.metadata.get("title", "제목 없음"),
             "case_id": doc.metadata.get("case_id", "번호 없음"),
             "dept": doc.metadata.get("dept", "진료과 없음"),
-            "content_preview": doc.page_content[:150] + "..." # 내용 미리보기
+            "content_preview": doc.page_content[:150] + "..."
         })
 
     # 3. 답변 생성
@@ -80,7 +80,7 @@ async def chat_with_sources(request: Question):
     # 4. 답변과 출처를 묶어서 반환
     return {
         "answer": answer,
-        "sources": sources # 프론트엔드에서 '참고 문헌 카드' 만들 데이터
+        "sources": sources 
     }
 
 # [추가] 대화 내역 조회 (새로고침 대응용)

@@ -61,9 +61,9 @@ def get_rag_chain():
     vectorstore = Chroma(persist_directory=PERSIST_DIR, embedding_function=embeddings)
     retriever = vectorstore.as_retriever(search_kwargs={'k': 3})
 
-    # 2. LLM 설정 (여기가 핵심 수정 파트)
+    # 2. LLM 설정 
     llm = WatsonxLLM(
-        # [수정] 지원 목록에 있는 정확한 ID로 변경
+        
         model_id="meta-llama/llama-3-405b-instruct",
         
         url=IBM_URL,
@@ -79,7 +79,7 @@ def get_rag_chain():
         }
     )
 
-    # 3. 프롬프트 강화 (URL 금지, 반복 금지)
+    # 3. 프롬프트 
     template = template = """
 # Role
 당신은 '의료 소송 전문 AI 변호사'입니다.
