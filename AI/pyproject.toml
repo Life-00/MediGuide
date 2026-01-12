@@ -1,0 +1,31 @@
+[project]
+name = "mediguide_rag"
+version = "0.1.0"
+description = "IBM watsonx 기반 의료 분쟁 솔루션 RAG 챗봇"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langchain-ibm>=0.3.0",
+    "langchain-chroma>=0.1.0",
+    "chromadb>=0.5.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "python-dotenv>=1.0.0",
+    "torch>=2.0.0",
+    "fastapi>=0.128.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+# uv 관련 설정 (필요시 추가)
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mediguide_rag"]
+
