@@ -64,7 +64,7 @@ def get_rag_chain():
     # 2. LLM 설정 
     llm = WatsonxLLM(
         
-        model_id="meta-llama/llama-3-405b-instruct",
+        model_id="meta-llama/llama-3-3-70b-instruct",
         
         url=IBM_URL,
         apikey=WATSONX_API,
@@ -207,7 +207,7 @@ def get_router_chain():
     """
     # 판단은 70B 모델 사용 
     llm = WatsonxLLM(
-        model_id="meta-llama/llama-3-3-70b-instruct",
+        model_id="ibm/granite-3-8b-instruct",
         url=IBM_URL,
         apikey=WATSONX_API,
         project_id=PROJECT_ID,
