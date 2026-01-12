@@ -10,7 +10,7 @@ import asyncio
 try:
     from rag_pipeline import get_rag_chain, get_retriever, get_session_history
 except ImportError:
-    from src.mediguide_rag.rag_pipeline import get_rag_chain, get_retriever, get_session_history
+    from src.mediguide_rag.rag_pipeline import get_rag_chain, get_retriever, get_session_history, get_writing_chain, store
 
 app = FastAPI()
 
@@ -26,6 +26,7 @@ app.add_middleware(
 # 1. 체인 및 검색기 로딩
 chain = get_rag_chain()
 retriever = get_retriever() 
+writing_chain = get_writing_chain()
 
 class Question(BaseModel):
     query: str
@@ -96,4 +97,31 @@ async def get_history(session_id: str):
         return {"history": []}
     except:
         return {"history": []}
+    
+    
+@app.post("/generate_document")
+async def generate_document(request: Question):
+    """
+    RAG 상담 내역을 바탕으로 내용증명서 초안을 생성합니다.
+    """
+    print(f"📝 [문서 작성 요청] 세션 ID: {request.session_id}")
+    
+    # 1. 메모리(store)에서 대화 기록 가져오기
+    history_text = ""
+    if request.session_id in store:
+        messages = store[request.session_id].messages
+        # 대화 내용을 문자열로 예쁘게 변환
+        for msg in messages:
+            role = "의뢰인(환자)" if msg.type == "human" else "AI 변호사"
+            history_text += f"- {role}: {msg.content}\n"
+    else:
+        # 대화 기록이 없으면 기본 텍스트 처리
+        history_text = "대화 기록 없음. (사용자가 백내장 수술 부작용을 호소하는 상황이라고 가정)"
+
+    # 2. 작성기(Writer LLM) 호출
+    try:
+        document_draft = writing_chain.invoke({"chat_history": history_text})
+        return {"document": document_draft}
+    except Exception as e:
+        return {"document": f"문서 작성 중 오류가 발생했습니다: {str(e)}"}
 # 실행: uv run uvicorn main:app --reload
