@@ -130,9 +130,6 @@ def get_rag_chain():
     return chain_with_history
 
 
-# rag_pipeline.py (맨 아래에 추가)
-
-# rag_pipeline.py 의 get_writing_chain 함수 교체
 
 def get_writing_chain():
     """
@@ -145,7 +142,7 @@ def get_writing_chain():
         apikey=WATSONX_API,
         project_id=PROJECT_ID,
         params={
-            "decoding_method": "greedy", # [중요] 창의성보다는 포맷 준수가 중요하므로 greedy로 변경
+            "decoding_method": "greedy", 
             "max_new_tokens": 2000,
             "min_new_tokens": 100,
             "repetition_penalty": 1.0
@@ -208,7 +205,7 @@ def get_router_chain():
     """
     사용자의 질문 의도를 'CHAT'(상담) 또는 'DOC'(문서작성/수정)으로 분류하는 체인
     """
-    # 판단은 70B 모델 사용 (똑똑하지만 가벼움)
+    # 판단은 70B 모델 사용 
     llm = WatsonxLLM(
         model_id="meta-llama/llama-3-3-70b-instruct",
         url=IBM_URL,

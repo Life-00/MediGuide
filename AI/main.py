@@ -78,15 +78,13 @@ async def chat_endpoint(request: Question):
             else:
                 history_text = "이전 대화 기록 없음."
 
-            # 🚨 [핵심 수정] 과거 기록 + '현재 요청사항'을 합쳐서 전달해야 함
-            # 이걸 안 하면 AI가 "수정해줘"라는 말을 못 듣고 옛날 문서만 또 씀
+            
             full_context = history_text + f"\n🔴 [의뢰인의 현재 요청사항(가장 중요)]: {request.query}\n"
 
             # (2) Writer LLM 호출
             document_content = writing_chain.invoke({"chat_history": full_context})
 
             # (3) [Memory Sync] 수동으로 기억 저장
-            # RAG 체인과 달리, 여기서 직접 store에 넣어줘야 대화가 끊기지 않음
             if request.session_id in store:
                 store[request.session_id].add_message(HumanMessage(content=request.query))
                 store[request.session_id].add_message(AIMessage(content=document_content))
@@ -113,7 +111,7 @@ async def chat_endpoint(request: Question):
                 sources.append({
                     "title": doc.metadata.get("title", "관련 판례/자료"),
                     "case_id": doc.metadata.get("case_id", "정보 없음"),
-                    "content_preview": doc.page_content[:200] + "..." # 미리보기 길이 늘림
+                    "content_preview": doc.page_content[:200] + "..." 
                 })
 
             # (2) RAG 답변 생성
