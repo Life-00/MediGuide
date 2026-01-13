@@ -25,14 +25,14 @@ export default function MarkdownRenderer({ content = "" }) {
             />
           ),
           code: ({ inline, className, children, ...props }) => {
-            // ```lang 코드블록 지원용
+            // ```lang 코드블록을 깔끔한 문서 스타일로 표시
             if (!inline) {
               return (
-                <pre className="overflow-auto rounded-xl bg-slate-900 p-4 text-slate-100">
-                  <code className={className} {...props}>
+                <div className="my-4 rounded-lg bg-white border-2 border-slate-200 p-6 shadow-sm">
+                  <pre className="whitespace-pre-wrap break-words font-sans text-sm text-slate-800 leading-relaxed">
                     {children}
-                  </code>
-                </pre>
+                  </pre>
+                </div>
               );
             }
             // 인라인 코드
