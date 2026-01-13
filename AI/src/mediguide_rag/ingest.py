@@ -70,8 +70,9 @@ def ingest_data():
     if os.path.exists(PERSIST_DIR):
         print("⚠️ 기존 DB 폴더가 존재합니다. 덮어쓰기를 진행합니다.")
         # 안전하게 새로 만들고 싶다면 아래 주석 해제 (기존 DB 삭제)
-        # import shutil
-        # shutil.rmtree(PERSIST_DIR)
+        import shutil
+        if os.path.exists(PERSIST_DIR):
+            shutil.rmtree(PERSIST_DIR)
     
     Chroma.from_documents(
         documents=chunks,
