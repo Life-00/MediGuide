@@ -61,10 +61,10 @@ export const Sidebar = ({
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-lg text-white tracking-tight leading-none">
-                Concierge
+                MediGuide
               </span>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">
-                Enterprise AI
+                Consumer AI
               </span>
             </div>
           </div>
@@ -85,7 +85,7 @@ export const Sidebar = ({
             type="button"
           >
             <Plus size={18} />
-            새로운 프로젝트 시작
+            새로운 대화 시작
           </button>
         </div>
 
@@ -223,7 +223,7 @@ export const Sidebar = ({
             </div>
             <div className="flex flex-col overflow-hidden">
               <span className="text-sm font-bold text-white truncate">
-                Guest User
+                User
               </span>
               <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-tighter">
                 Premium Account

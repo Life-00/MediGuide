@@ -268,36 +268,45 @@ export default function App() {
 
   // 체크리스트 정적 데이터
   const checklistData = {
-    evidence: `**[필수 증거 체크리스트]**
+    evidence: `### 📋 필수 증거 체크리스트
 
-✅ **진료기록부 사본 (전체)**: 초진 기록, 수술/시술 기록, 경과 기록, 간호 기록지 등 "빠짐없이 전체"를 요청하세요. (의료법상 병원은 거부할 수 없음)
+**☐ 진료기록부 사본 (전체)**
+초진 기록, 수술/시술 기록, 경과 기록, 간호 기록지 등 
+빠짐없이 전체를 요청하세요.
 
-✅ **영상 자료 (CD/USB)**: CT, MRI, X-ray 등 촬영된 모든 영상 자료.
+**☐ 영상 자료 (CD/USB)**
+CT, MRI, X-ray 등 촬영된 모든 영상 자료
 
-✅ **수술/시술 동의서**: 부작용 설명을 들었다는 서명이 있는 문서.
+**☐ 수술/시술 동의서**
+부작용 설명을 들었다는 서명이 있는 문서
 
-✅ **결제 영수증**: 진료비 상세 내역서 포함.
+**☐ 결제 영수증**
+진료비 상세 내역서 포함
 
-✅ **CCTV 영상**: (수술실 내 CCTV가 있는 경우) 보존 기간이 지나기 전에 빠르게 '증거보전신청'을 하거나 열람 요청을 해야 함.
+**☐ CCTV 영상**
+보존 기간 전 빠르게 증거보전신청 필요
 
-✅ **녹취/사진**: 의료진과의 대화 내용 녹음, 환부의 날짜별 사진.`,
+**☐ 녹취/사진**
+대화 녹음, 환부의 날짜별 사진`,
 
-    procedure: `**[한국의료분쟁조정중재원 신청 절차]**
+    procedure: `### ⚖️ 한국의료분쟁조정중재원 신청 절차
 
-1️⃣ **상담 신청**
-전화(1670-2545) 또는 홈페이지 온라인 상담.
+**① 상담 신청**
+전화(1670-2545) 또는 홈페이지 온라인 상담
 
-2️⃣ **조정 신청서 제출**
-사건 개요와 피해 내용을 적어 우편/방문/온라인 제출. (수수료 약 2~3만원 발생)
+**② 조정 신청서 제출**
+사건 개요와 피해 내용 작성 후 우편/방문/온라인 제출
+(수수료 약 2~3만원 발생)
 
-3️⃣ **피신청인 동의 확인**
-병원 측이 조정에 동의해야 절차가 개시됨. (단, 사망/1개월 이상 의식불명/장애등급 1급 등은 자동 개시)
+**③ 피신청인 동의 확인**
+병원 측이 조정에 동의해야 절차 개시
+※ 사망/1개월 이상 의식불명/장애 1급은 자동 개시
 
-4️⃣ **감정 및 조정**
-의료 전문가와 법률가가 과실 유무 판단.
+**④ 감정 및 조정**
+의료 전문가와 법률가가 과실 유무 판단
 
-5️⃣ **합의/결정**
-조정안을 양측이 받아들이면 재판상 화해와 동일한 효력.`,
+**⑤ 합의/결정**
+조정안 수락 시 재판상 화해와 동일한 효력`,
   };
 
   // 체크리스트 버튼 클릭 핸들러 (스트리밍 방식)
@@ -356,7 +365,7 @@ export default function App() {
               {sessions.find((s) => s.id === activeSessionId)?.title || "새로운 대화"}
             </span>
             <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-              ● watsonx ACTIVE
+              ● IBM watsonx ACTIVE
             </span>
           </div>
 
@@ -406,26 +415,6 @@ export default function App() {
                     </button>
                   ))}
                 </div>
-
-                {/* 체크리스트 버튼 - 홈 화면에만 표시 */}
-                <div className="mt-8 flex justify-center gap-3 flex-wrap">
-                  <button
-                    onClick={() => onChecklistClick('evidence')}
-                    className="text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-4 py-2 rounded-full hover:bg-slate-50 hover:border-slate-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    type="button"
-                    disabled={disabled}
-                  >
-                    📋 필수 증거 체크리스트
-                  </button>
-                  <button
-                    onClick={() => onChecklistClick('procedure')}
-                    className="text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-4 py-2 rounded-full hover:bg-slate-50 hover:border-slate-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    type="button"
-                    disabled={disabled}
-                  >
-                    ⚖️ 한국의료분쟁조정중재원 신청 절차
-                  </button>
-                </div>
               </div>
             </div>
           ) : (
@@ -462,31 +451,82 @@ export default function App() {
           )}
         </div>
 
-        <div className="flex-shrink-0 relative">
-          {/* 내용증명서 작성 플로팅 버튼 - 채팅 시작 후에만 표시 */}
-          {!isHome && (
-            <div className="absolute -top-16 right-6 group">
+        {/* 우측 플로팅 버튼 그룹 - 항상 표시 */}
+        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50">
+          {/* 플로팅 바 컨테이너 */}
+          <div className="bg-white p-3 rounded-2xl shadow-xl border border-slate-100 flex flex-col gap-4">
+            
+            {/* 필수 증거 체크리스트 */}
+            <button
+              onClick={() => onChecklistClick("evidence")}
+              type="button"
+              disabled={disabled}
+              className="group relative flex items-center justify-center w-14 h-14 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                />
+              </svg>
+              <span className="absolute right-full mr-3 px-3 py-1.5 bg-white text-gray-800 text-xs rounded shadow-lg border border-gray-300 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">
+                필수 증거 체크리스트
+              </span>
+            </button>
+
+            {/* 한국의료분쟁조정중재원 신청 절차 */}
+            <button
+              onClick={() => onChecklistClick("procedure")}
+              type="button"
+              disabled={disabled}
+              className="group relative flex items-center justify-center w-14 h-14 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span className="absolute right-full mr-3 px-3 py-1.5 bg-white text-gray-800 text-xs rounded shadow-lg border border-gray-300 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">
+                한국의료분쟁조정중재원 신청 절차
+              </span>
+            </button>
+
+            {/* 내용증명서 작성 - 채팅 시작 후에만 표시 */}
+            {!isHome && (
               <button
-                onClick={() => onSendMessage('지금까지 상담한 내용을 바탕으로 의료사고 손해배상 청구 내용증명서를 작성해줘')}
-                className="w-12 h-12 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all flex items-center justify-center text-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() =>
+                  onSendMessage(
+                    "지금까지 상담한 내용을 바탕으로 의료사고 손해배상 청구 내용증명서를 작성해줘"
+                  )
+                }
                 type="button"
                 disabled={disabled}
-                aria-label="내용증명서 작성"
+                className="group relative flex items-center justify-center w-14 h-14 bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                📄
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                <span className="absolute right-full mr-3 px-3 py-1.5 bg-white text-gray-800 text-xs rounded shadow-lg border border-gray-300 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">
+                  내용증명서 작성
+                </span>
               </button>
-              
-              {/* 툴팁 말풍선 */}
-              <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <div className="bg-slate-800 text-white text-xs font-medium px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
-                  지금 내용으로 내용증명서 작성
-                  {/* 말풍선 꼬리 */}
-                  <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-800"></div>
-                </div>
-              </div>
-            </div>
-          )}
-          
+            )}
+            
+          </div>
+        </div>
+
+
+        <div className="flex-shrink-0 relative">
           <ChatInput onSendMessage={onSendMessage} disabled={disabled} />
         </div>
       </div>
