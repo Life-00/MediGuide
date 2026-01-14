@@ -25,7 +25,7 @@
 | 구분 | 사용 기술 |
 | :--- | :--- |
 | **LLM & AI** | **IBM watsonx.ai** (Granite-3 / Llama-3) |
-| **Vector DB** | ChromaDB (watsonx.data 연동) |
+| **Vector DB** | ChromaDB |
 | **Backend** | Python, FastAPI |
 | **Frontend** | React, Next.js, Tailwind CSS |
 | **Data** | Excel Parsing, Embedding (Granite-Embedding) |
