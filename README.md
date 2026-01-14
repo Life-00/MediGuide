@@ -24,11 +24,11 @@
 ## 🛠 기술 스택 (Tech Stack)
 | 구분 | 사용 기술 |
 | :--- | :--- |
-| **LLM & AI** | **IBM watsonx.ai** (Granite-3.0 / Llama-3-70b) |
-| **Vector DB** | **Milvus** / ChromaDB (watsonx.data 연동) |
+| **LLM & AI** | **IBM watsonx.ai** (Granite-3 / Llama-3) |
+| **Vector DB** | ChromaDB |
 | **Backend** | Python, FastAPI |
 | **Frontend** | React, Next.js, Tailwind CSS |
-| **Data** | PDF/Excel Parsing, Embedding (watsonx Embedding SDK) |
+| **Data** | Excel Parsing, Embedding (Granite-Embedding) |
 
 ---
 
